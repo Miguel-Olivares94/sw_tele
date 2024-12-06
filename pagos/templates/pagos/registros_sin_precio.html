@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registros sin precio asignado</title>
+</head>
+<body>
+    <h1>Error al generar la tabla de pago</h1>
+    <p>El {{ porcentaje_sin_precio }}% de los registros no tienen precio asignado.</p>
+    <p>Por favor, revise los registros que no tienen precio.</p>
+
+    <h2>Detalles de los registros sin precio:</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Especialidad Usuario</th>
+                <th>Zona Adjudicación</th>
+                <th>Zona Operacional</th>
+                <th>Área</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registro in registros_sin_precio %}
+            <tr>
+                <td>{{ registro.especialidad_usuario }}</td>
+                <td>{{ registro.zona_adjudicacion }}</td>
+                <td>{{ registro.zona_operacional }}</td>
+                <td>{{ registro.area }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

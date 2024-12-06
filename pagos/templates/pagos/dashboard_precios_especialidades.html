@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard de Precios por Especialidad{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Dashboard de Precios por Especialidad</h2>
+
+    <!-- Mostrar los registros por año -->
+    <div class="row">
+        {% for anio, especialidades in datos_agrupados.items %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm" style="width: 100%; border-radius: 10px;">
+                <div class="card-body text-center">
+                    <h5 class="card-title" style="font-weight: bold; color: #003563;">
+                        Año: {{ anio }}
+                    </h5>
+                    <a href="{% url 'nuevatabladepagos' %}" class="btn btn-outline-primary mb-2 action-button">
+                        <i class="fas fa-calendar-alt"></i> Ver Precio especialidades
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Botones adicionales -->
+    <div class="text-center mt-4">
+        <a href="{% url 'cargar_nueva_tabla_pagos' %}" class="btn btn-secondary action-button">
+            <i class="fas fa-upload"></i> Cargar Precios especialidad
+        </a>
+    </div>
+
+    <!-- Gráfico de distribución de precios por especialidad -->
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h4 class="text-center mb-4">Distribución de Precios por Especialidad</h4>
+            <canvas id="priceDistributionChart"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .container {
+        margin-top: 50px;
+    }
+    h2 {
+        color: #003563;
+        font-weight: bold;
+        font-size: 2rem;
+    }
+    /* Estilos de botones y tarjetas */
+    .btn-outline-primary, .btn-outline-info, .btn-outline-success {
+        color: #333;
+        border: 1px solid;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .btn-outline-primary { border-color: #007bff; color: #007bff; }
+    .btn-outline-primary:hover { background-color: #007bff; color: white; }
+    .btn-secondary { background-color: #6c757d; color: white; }
+    .action-button { display: inline-flex; align-items: center; justify-content: center; font-weight: bold; padding: 10px 20px; border-radius: 25px; font-size: 1rem; width: 100%; }
+    .action-button i { margin-right: 8px; }
+    .card { border: 1px solid #ddd; border-radius: 10px; background-color: #f8f9fa; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .card:hover { transform: scale(1.03); box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); }
+    .card-title { font-size: 1.3rem; font-weight: bold; color: #003563; }
+    .card-body { text-align: center; }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Preparar datos para el gráfico de distribución de precios
+    const labels = [{% for anio, especialidades in datos_agrupados.items %} "{{ anio }}", {% endfor %}];
+    const data = {
+        labels: labels,
+        datasets: [
+            {% for anio, especialidades in datos_agrupados.items %}
+            {
+                label: 'Precios {{ anio }}',
+                data: [{% for especialidad in especialidades %} {{ especialidad.precio }}, {% endfor %}],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            },
+            {% endfor %}
+        ]
+    };
+
+    // Configuración del gráfico
+    const config = {
+        type: 'bar',
+        data: data,
+        options: {
+            responsive: true,
+            scales: { y: { beginAtZero: true } },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return '$' + context.raw.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    // Renderizar el gráfico
+    const priceDistributionChart = new Chart(
+        document.getElementById('priceDistributionChart'),
+        config
+    );
+</script>
+{% endblock %}

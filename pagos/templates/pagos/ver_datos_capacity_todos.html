@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}Ver Todos los Datos de Capacity{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Todos los Datos de Capacity</h1>
+
+    <!-- Botón para crear nuevo registro -->
+    <div class="text-center mb-4">
+        <a href="{% url 'crear_capacity' %}" class="btn btn-success">
+            <span class="icon">&#43;</span> Crear Capacity
+        </a>
+    </div>
+
+    <!-- Formulario de búsqueda -->
+    <form method="GET" action="" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Buscar por nombre, especialidad, área..." value="{{ query }}">
+            <button class="btn btn-primary" type="submit">Buscar</button>
+        </div>
+    </form>
+
+    <!-- Tabla de datos -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Fecha Extract Registro</th>
+                    <th>Nombre Técnico</th>
+                    <th>Nombre Team</th>
+                    <th>Especialidad Usuario</th>
+                    <th>Área</th>
+                    <th>RUT Técnico</th>
+                    <th>Zona Operacional</th>
+                    <th>Zona Adjudicación</th>
+                    <th>Especialidad Team</th>
+                    <th>Capacidad</th>
+                    <th>Total HH</th>
+                    <th>PHI</th>
+                    <th>Total HH + PHI</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if datos %}
+                    {% for dato in datos %}
+                        <tr>
+                            <td>{{ dato.fecha_extract_registro }}</td>
+                            <td>{{ dato.nombre_tecnico }}</td>
+                            <td>{{ dato.nombre_team }}</td>
+                            <td>{{ dato.especialidad_usuario }}</td>
+                            <td>{{ dato.area }}</td>
+                            <td>{{ dato.rut_tecnico }}</td>
+                            <td>{{ dato.zona_operacional }}</td>
+                            <td>{{ dato.zona_adjudicacion }}</td>
+                            <td>{{ dato.especialidad_team }}</td>
+                            <td>{{ dato.capacidad }}</td>
+                            <td>{{ dato.total_hh }}</td>
+                            <td>{{ dato.phi }}</td>
+                            <td>{{ dato.total_hh_phi }}</td>
+                            <td class="d-flex justify-content-around">
+                                <a href="{% url 'editar_capacity' dato.id %}" class="btn btn-sm btn-primary">
+                                    <span class="icon">&#9998;</span> Editar
+                                </a>
+                                <a href="{% url 'eliminar_capacity' dato.id %}" class="btn btn-sm btn-danger">
+                                    <span class="icon">&#128465;</span> Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="14" class="text-center">No hay datos disponibles</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if datos.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ datos.previous_page_number }}&q={{ query }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% for num in datos.paginator.page_range %}
+                <li class="page-item {% if datos.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}&q={{ query }}">{{ num }}</a>
+                </li>
+            {% endfor %}
+            {% if datos.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ datos.next_page_number }}&q={{ query }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}

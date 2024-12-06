@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}Filtrar Capacity del Mes: {{ month }}/{{ year }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Filtrar Capacity del Mes: {{ month }}/{{ year }}</h2>
+
+    <!-- Formulario de filtros -->
+    <form method="GET" action="">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="especialidad_usuario" class="form-label fw-bold">Especialidad Usuario:</label>
+                <select id="especialidad_usuario" name="especialidad_usuario" class="form-select">
+                    <option value="">Seleccione Especialidad</option>
+                    {% for especialidad in especialidades %}
+                        <option value="{{ especialidad }}" {% if especialidad == especialidad_usuario %}selected{% endif %}>{{ especialidad }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="area" class="form-label fw-bold">Área:</label>
+                <select id="area" name="area" class="form-select">
+                    <option value="">Seleccione Área</option>
+                    {% for area_option in areas %}
+                        <option value="{{ area_option }}" {% if area_option == area %}selected{% endif %}>{{ area_option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="zona_operacional" class="form-label fw-bold">Zona Operacional:</label>
+                <select id="zona_operacional" name="zona_operacional" class="form-select">
+                    <option value="">Seleccione Zona Operacional</option>
+                    {% for zona in zonas_operacionales %}
+                        <option value="{{ zona }}" {% if zona == zona_operacional %}selected{% endif %}>{{ zona }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="zona_adjudicacion" class="form-label fw-bold">Zona Adjudicación:</label>
+                <select id="zona_adjudicacion" name="zona_adjudicacion" class="form-select">
+                    <option value="">Seleccione Zona Adjudicación</option>
+                    {% for zona_option in zonas_adjudicacion %}
+                        <option value="{{ zona_option }}" {% if zona_option == zona_adjudicacion %}selected{% endif %}>{{ zona_option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+                <a href="{% url 'ver_datos_capacity_mes' year month %}" class="btn btn-secondary">Limpiar Filtros</a>
+            </div>
+        </div>
+    </form>
+
+    <!-- Resultados de la tabla -->
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Fecha Extract Registro</th>
+                    <th>RUT Técnico</th>
+                    <th>Nombre Técnico</th>
+                    <th>Nombre Team</th>
+                    <th>Especialidad Usuario</th>
+                    <th>Área</th>
+                    <th>Zona Operacional</th>
+                    <th>Zona Adjudicación</th>
+                    <th>Especialidad Team</th>
+                    <th>Capacidad</th>
+                    <th>Total HH</th>
+                    <th>PHI</th>
+                    <th>Total HH + PHI</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if datos %}
+                    {% for dato in datos %}
+                        <tr>
+                            <td>{{ dato.fecha_extract_registro|date:"d/m/Y" }}</td>
+                            <td>{{ dato.rut_tecnico }}</td>
+                            <td>{{ dato.nombre_tecnico }}</td>
+                            <td>{{ dato.nombre_team }}</td>
+                            <td>{{ dato.especialidad_usuario }}</td>
+                            <td>{{ dato.area }}</td>
+                            <td>{{ dato.zona_operacional }}</td>
+                            <td>{{ dato.zona_adjudicacion }}</td>
+                            <td>{{ dato.especialidad_team }}</td>
+                            <td>{{ dato.capacidad }}</td>
+                            <td>{{ dato.total_hh }}</td>
+                            <td>{{ dato.phi }}</td>
+                            <td>{{ dato.total_hh_phi }}</td>
+                            <td>
+                                <a href="{% url 'editar_capacity' dato.id %}" class="btn btn-sm btn-primary">Editar</a>
+                                <a href="{% url 'eliminar_capacity' dato.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="14" class="text-center">No se encontraron registros con los filtros aplicados.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination justify-content-center">
+        {% if datos.has_previous %}
+            <a href="?page={{ datos.previous_page_number }}" class="btn btn-outline-secondary">&laquo; Anterior</a>
+        {% endif %}
+        {% for num in datos.paginator.page_range %}
+            <a href="?page={{ num }}" class="btn {% if datos.number == num %}btn-primary{% else %}btn-outline-secondary{% endif %}">{{ num }}</a>
+        {% endfor %}
+        {% if datos.has_next %}
+            <a href="?page={{ datos.next_page_number }}" class="btn btn-outline-secondary">Siguiente &raquo;</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

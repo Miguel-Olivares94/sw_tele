@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Dashboard de Capacity{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Dashboard de Capacity</h2>
+
+    <!-- Mostrar los registros por mes -->
+    <div class="row">
+        {% for record in records %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm" style="width: 100%; border-radius: 10px;">
+                <div class="card-body text-center">
+                    <h5 class="card-title" style="font-weight: bold; color: #003563;">
+                        {% with record.month|date:"F" as month_name %}
+                            {% if month_name == "January" %}Enero
+                            {% elif month_name == "February" %}Febrero
+                            {% elif month_name == "March" %}Marzo
+                            {% elif month_name == "April" %}Abril
+                            {% elif month_name == "May" %}Mayo
+                            {% elif month_name == "June" %}Junio
+                            {% elif month_name == "July" %}Julio
+                            {% elif month_name == "August" %}Agosto
+                            {% elif month_name == "September" %}Septiembre
+                            {% elif month_name == "October" %}Octubre
+                            {% elif month_name == "November" %}Noviembre
+                            {% elif month_name == "December" %}Diciembre
+                            {% else %}{{ month_name }}
+                            {% endif %}
+                            {{ record.month|date:" Y" }}
+                        {% endwith %}
+                    </h5>
+                    <p class="card-text">Total registros: {{ record.total_records }}</p>
+
+                    <!-- Botones de acción -->
+                    <a href="{% url 'ver_datos_capacity_mes' record.month.year record.month.month %}" class="btn btn-outline-primary mb-2 action-button">
+                        <i class="fas fa-calendar-alt"></i> Ver registros del mes
+                    </a>
+                    <a href="{% url 'descargar_capacity_por_mes' record.month.year record.month.month %}" class="btn btn-outline-info mb-2 action-button">
+                        <i class="fas fa-file-excel"></i> Descargar Capacity del Mes
+                    </a>
+                    <a href="{% url 'generar_tabla_pago_capacity_mes' record.month.year record.month.month %}" class="btn btn-outline-success mb-2 action-button">
+                        <i class="fas fa-table"></i> Generar Tabla de Pago del Mes
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Botones adicionales -->
+    <div class="text-center mt-4">
+        <a href="{% url 'cargar_excel' %}" class="btn btn-secondary action-button">
+            <i class="fas fa-upload"></i> Cargar Capacity
+        </a>
+        <a href="{% url 'ver_todos_los_datos_capacity' %}" class="btn btn-outline-info action-button mb-3">
+            <i class="fas fa-eye"></i> Ver Todos los Datos de Capacity
+        </a>
+        <a href="{% url 'descargar_capacity' %}" class="btn btn-outline-primary action-button mb-3">
+            <i class="fas fa-download"></i> Descargar Capacity
+        </a>
+        <a href="#" class="btn btn-outline-warning action-button">
+            <i class="fas fa-list-alt"></i> Resumen Pagos Capacity
+        </a>
+        <!-- Nuevo botón -->
+        <a href="{% url 'dashboard_tabladepago_capacity' %}" class="btn btn-outline-dark action-button">
+            <i class="fas fa-chart-bar"></i> Dashboard Tabla Pagos Capacity
+        </a>
+
+    </div>
+
+    <!-- Gráfico de Total Registros por Mes -->
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <canvas id="monthlyChart"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .container {
+        margin-top: 50px;
+    }
+    h2 {
+        color: #003563;
+        font-weight: bold;
+        font-size: 2rem;
+    }
+    /* Estilos de botones */
+    .action-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-size: 1rem;
+    }
+    .card {
+        border-radius: 10px;
+        background-color: #f8f9fa;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Gráfico de Total Registros por Mes
+    const monthlyLabels = [{% for record in records %} "{{ record.month|date:"F Y" }}", {% endfor %}];
+    const monthlyData = [{% for record in records %} {{ record.total_records }}, {% endfor %}];
+    const monthlyChartConfig = {
+        type: 'bar',
+        data: {
+            labels: monthlyLabels,
+            datasets: [{
+                label: 'Total Registros por Mes',
+                data: monthlyData,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: { y: { beginAtZero: true } }
+        }
+    };
+
+    // Renderizar el gráfico
+    const monthlyChart = new Chart(document.getElementById('monthlyChart'), monthlyChartConfig);
+</script>
+{% endblock %}

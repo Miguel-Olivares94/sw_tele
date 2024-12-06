@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 vh-100 d-flex align-items-center justify-content-center">
+    <div class="col-lg-8">
+        <h1 class="text-center mb-4">Crear Nuevo SLA Report</h1>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white text-center">
+                <h4 class="mb-0"><i class="fas fa-file-alt"></i> Formulario de Creación</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="zona_adjudicacion">Zona de Adjudicación</label>
+                            <select class="form-control {% if form.zona_adjudicacion.errors %}is-invalid{% endif %}" id="zona_adjudicacion" name="zona_adjudicacion" required>
+                                <option value="">Seleccione una zona</option>
+                                {% for zona in zonas_adjudicacion %}
+                                    <option value="{{ zona.id }}">{{ zona.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="zona_operativa">Zona Operativa</label>
+                            <select class="form-control" id="zona_operativa" name="zona_operativa" required>
+                                <option value="">Seleccione una zona</option>
+                                {% for zona in zonas_operativas %}
+                                    <option value="{{ zona.id }}">{{ zona.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="bonus_o_malus">Bonus o Malus</label>
+                            <input type="number" step="0.01" class="form-control" id="bonus_o_malus" name="bonus_o_malus" placeholder="Ej. 1234.56" required>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="proyecto">Proyecto</label>
+                            <select class="form-control" id="proyecto" name="proyecto" required>
+                                <option value="">Seleccione un proyecto</option>
+                                {% for proyecto in proyectos %}
+                                    <option value="{{ proyecto.id }}">{{ proyecto.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fecha">Fecha</label>
+                        <input type="date" class="form-control" id="fecha" name="fecha" required>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-check-circle"></i> Crear
+                        </button>
+                        <a href="{% url 'ver_sla_report' %}" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-times-circle"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

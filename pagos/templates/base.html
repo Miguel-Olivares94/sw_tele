@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Menú{% endblock %}</title>
+    
+    {% load static %}
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Estilos personalizados -->
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background-color: #005BAC;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 60px; /* Altura reducida */
+        }
+
+        .navbar-brand img {
+            height: 30px; /* Logo más pequeño */
+        }
+
+        .sidebar {
+            width: 60px; /* Ancho reducido */
+            background: linear-gradient(180deg, #002D72, #005BAC);
+            position: fixed;
+            top: 60px; /* Ajuste según la altura de la navbar */
+            bottom: 0;
+            left: 0;
+            padding-top: 10px; /* Menos espacio superior */
+            transition: width 0.3s ease-in-out;
+            z-index: 999;
+            overflow: hidden;
+        }
+
+        .sidebar:hover {
+            width: 180px; /* Ancho expandido más pequeño */
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 8px 10px; /* Espaciado reducido */
+            color: white;
+            text-decoration: none;
+            font-size: 13px; /* Fuente más pequeña */
+            transition: background 0.3s, padding-left 0.3s, transform 0.3s ease;
+            position: relative;
+        }
+
+        .sidebar a:hover {
+            background-color: #004b93;
+            border-left: 3px solid #ffdd00;
+            transform: scale(1.05);
+        }
+
+        .sidebar a span.text {
+            display: none;
+            margin-left: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .sidebar:hover a span.text {
+            display: inline;
+            opacity: 1;
+        }
+
+        .sidebar a span.icon {
+            min-width: 25px; /* Tamaño de icono reducido */
+            font-size: 1.1em; /* Tamaño de icono reducido */
+            text-align: center;
+            transition: transform 0.3s, color 0.3s;
+            color: #ffffffb3;
+        }
+
+        .sidebar a:hover span.icon {
+            transform: rotate(15deg);
+            color: #ffdd00;
+        }
+
+        .sidebar-divider {
+            border-bottom: 1px solid #ffffff33;
+            margin: 10px 0;
+        }
+
+        .main-content {
+            margin-left: 60px; /* Ancho inicial de la barra lateral */
+            padding: 80px 15px 15px;
+            flex-grow: 1;
+            transition: margin-left 0.3s;
+        }
+
+        .sidebar:hover ~ .main-content {
+            margin-left: 180px; /* Ancho expandido */
+        }
+
+        .navbar-text {
+            color: white;
+            font-size: 15px;
+        }
+    </style>
+
+    {% block extra_styles %}{% endblock %}
+</head>
+<body>
+
+    <!-- Barra de navegación superior -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'img/LOGO-TELEFONICA-AZUL_1200.png' %}" alt="Logo Telefónica">
+        </a>
+        <div class="ml-auto navbar-text">
+            {{ user.first_name }} {{ user.last_name_paterno }} {{ user.last_name_materno }}
+            <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm ml-3">Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <!-- Barra lateral de navegación -->
+    <div class="sidebar">
+        <a href="{% url 'index' %}" class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+            <span class="icon"><i class="fas fa-home"></i></span>
+            <span class="text">Inicio</span>
+        </a>
+        <div class="sidebar-divider"></div>
+        <a href="{% url 'cargar_excel' %}" class="{% if request.resolver_match.url_name == 'cargar_excel' %}active{% endif %}">
+            <span class="icon"><i class="fas fa-file-excel"></i></span>
+            <span class="text">Cargar Capacity</span>
+        </a>
+        <a href="{% url 'cargar_tabla_lpu' %}" class="{% if request.resolver_match.url_name == 'cargar_tabla_lpu' %}active{% endif %}">
+            <span class="icon"><i class="fas fa-file-excel"></i></span>
+            <span class="text">Cargar LPU</span>
+        </a>
+        <a href="{% url 'cargar_sla_excel' %}" class="{% if request.resolver_match.url_name == 'cargar_sla_excel' %}active{% endif %}">
+            <span class="icon"><i class="fas fa-file-excel"></i></span>
+            <span class="text">Cargar SLA</span>
+        </a>
+        <div class="sidebar-divider"></div>
+        <a href="{% url 'cargar_nueva_tabla_pagos' %}" class="{% if request.resolver_match.url_name == 'cargar_nueva_tabla_pagos' %}active{% endif %}">
+            <span class="icon"><i class="fas fa-dollar-sign"></i></span>
+            <span class="text">Cargar $ Especialidades</span>
+        </a>
+        <a href="{% url 'nuevatabladepagos' %}" class="{% if request.resolver_match.url_name == 'nuevatabladepagos' %}active{% endif %}">
+            <span class="icon"><i class="fas fa-coins"></i></span>
+            <span class="text">Precio Especialidades</span>
+        </a>
+        <div class="sidebar-divider"></div>
+        <a href="{% url 'dashboard_capacity' %}" class="{% if request.resolver_match.url_name == 'dashboard_capacity' %}active{% endif %}">
+            <span class="icon"><i class="fas fa-chart-line"></i></span>
+            <span class="text">Dashboard Capacity</span>
+        </a>
+        <a href="{% url 'dashboard_lpu' %}" class="{% if request.resolver_match.url_name == 'dashboard_lpu' %}active{% endif %}">
+            <span class="icon"><i class="fas fa-chart-line"></i></span>
+            <span class="text">Dashboard LPU</span>
+        </a>
+        <a href="{% url 'sla_dashboard' %}" class="{% if request.resolver_match.url_name == 'sla_dashboard' %}active{% endif %}">
+            <span class="icon"><i class="fas fa-chart-line"></i></span>
+            <span class="text">Dashboard SLA</span>
+        </a>
+        
+        <div class="sidebar-divider"></div>
+        
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard de Precios por Año{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Dashboard de Precios por Año</h1>
+
+    <!-- Mostrar los totales por Año -->
+    <div class="row">
+        {% for record in precios_anuales %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm" style="width: 100%;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ record.anio }}</h5>
+                    <p class="card-text">Total de Registros: {{ record.total_registros }}</p>
+
+                    <a href="{% url 'ver_precios_por_anio' record.anio %}" class="btn btn-info mb-2">
+                        <i class="fas fa-calendar-alt"></i> Ver Registros del Año
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="text-center mt-4">
+        <!-- Botón con icono de ojo (eye) para Ver todos los Precios -->
+        <a href="{% url 'ver_todos_precios_especialidades' %}" class="btn btn-primary mb-3">
+            <i class="fas fa-eye"></i> Ver Todos los Precios de Especialidades
+        </a>
+        <!-- Nuevo botón para Resumen de Pagos por Especialidad sin enlace aún -->
+        <a href="#" class="btn btn-warning">
+            <i class="fas fa-list-alt"></i> Resumen Pagos Especialidades
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .container {
+        margin-top: 50px;
+    }
+
+    h1 {
+        color: #003563;
+    }
+
+    .btn-primary, .btn-info, .btn-warning {
+        width: 100%;
+        display: block;
+        margin-top: 10px;
+    }
+
+    .btn i {
+        margin-right: 5px;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #003563;
+    }
+
+    .card-body {
+        text-align: center;
+    }
+</style>
+{% endblock %}

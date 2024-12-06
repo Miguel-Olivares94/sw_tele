@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Pago - {{ month }}/{{ year }}</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            background-color: #005BAC;
+        }
+
+        h1 {
+            color: #005BAC;
+        }
+
+        .table th, .table td {
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Tabla de Pago para el Mes {{ month }}/{{ year }}</h1>
+
+        <h3>Enlace para descargar la tabla:</h3>
+        <a class="btn btn-success" href="{{ output_path }}" role="button">Descargar Tabla de Pago (Excel)</a>
+
+        <h3 class="mt-4">Vista previa de la tabla:</h3>
+        <div class="table-responsive">
+            <table id="payment-table" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nombre Técnico</th>
+                        <th>Nombre Team</th>
+                        <th>Especialidad Usuario</th>
+                        <th>Área</th>
+                        <th>RUT Técnico</th>
+                        <th>Zona Operacional</th>
+                        <th>Zona Adjudicación</th>
+                        <th>Total HH</th>
+                        <th>PHI</th>
+                        <th>Total HH + PHI</th>
+                        <th>Q</th>
+                        <th>Precio</th>
+                        <th>Total a Pago</th>
+                        <th>Proyecto</th>
+                        <th>Tipo de Red</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dato in data %}
+                    <tr>
+                        <td>{{ dato.nombre_tecnico }}</td>
+                        <td>{{ dato.nombre_team }}</td>
+                        <td>{{ dato.especialidad_usuario }}</td>
+                        <td>{{ dato.area }}</td>
+                        <td>{{ dato.rut_tecnico }}</td>
+                        <td>{{ dato.zona_operacional }}</td>
+                        <td>{{ dato.zona_adjudicacion }}</td>
+                        <td>{{ dato.total_hh }}</td>
+                        <td>{{ dato.phi }}</td>
+                        <td>{{ dato.total_hh_phi }}</td>
+                        <td>{{ dato.Q }}</td>
+                        <td>{{ dato.precio }}</td>
+                        <td>{{ dato.total_a_pago }}</td>
+                        <td>{{ dato.proyecto }}</td>
+                        <td>{{ dato.tipo_de_red }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="15">No hay registros disponibles.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#payment-table').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros por página",
+                    "zeroRecords": "No se encontraron resultados",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "infoFiltered": "(filtrado de _MAX_ registros en total)",
+                    "search": "Buscar:",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Registro{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Editar Registro (ID: {{ registro.id }})</h2>
+    <form method="post" class="card p-4 shadow-sm" action="">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="nombre_tecnico" class="form-label">Nombre Técnico</label>
+            <input type="text" class="form-control" id="nombre_tecnico" name="nombre_tecnico" value="{{ registro.nombre_tecnico }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="nombre_team" class="form-label">Nombre Team</label>
+            <input type="text" class="form-control" id="nombre_team" name="nombre_team" value="{{ registro.nombre_team }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="especialidad_usuario" class="form-label">Especialidad Usuario</label>
+            <input type="text" class="form-control" id="especialidad_usuario" name="especialidad_usuario" value="{{ registro.especialidad_usuario }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="rut_tecnico" class="form-label">RUT Técnico</label>
+            <input type="text" class="form-control" id="rut_tecnico" name="rut_tecnico" value="{{ registro.rut_tecnico }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="zona_operacional" class="form-label">Zona Operacional</label>
+            <input type="text" class="form-control" id="zona_operacional" name="zona_operacional" value="{{ registro.zona_operacional }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="zona_adjudicacion" class="form-label">Zona Adjudicación</label>
+            <input type="text" class="form-control" id="zona_adjudicacion" name="zona_adjudicacion" value="{{ registro.zona_adjudicacion }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="total_hh" class="form-label">Total HH</label>
+            <input type="number" step="any" class="form-control" id="total_hh" name="total_hh" value="{{ registro.total_hh }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="phi" class="form-label">PHI</label>
+            <input type="number" step="any" class="form-control" id="phi" name="phi" value="{{ registro.phi }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="total_hh_phi" class="form-label">Total HH PHI</label>
+            <input type="number" step="any" class="form-control" id="total_hh_phi" name="total_hh_phi" value="{{ registro.total_hh_phi }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="nuevo_precio" class="form-label">Nuevo Precio</label>
+            <input type="number" step="any" class="form-control" id="nuevo_precio" name="nuevo_precio" value="{{ registro.nuevo_precio }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="Q" class="form-label">Q</label>
+            <input type="number" step="any" class="form-control" id="Q" name="Q" value="{{ registro.Q }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="Total_a_Pago" class="form-label">Total a Pago</label>
+            <input type="number" step="any" class="form-control" id="Total_a_Pago" name="Total_a_Pago" value="{{ registro.Total_a_Pago }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="tipo_red" class="form-label">Tipo Red</label>
+            <input type="text" class="form-control" id="tipo_red" name="tipo_red" value="{{ registro.tipo_red }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="proyecto" class="form-label">Proyecto</label>
+            <input type="text" class="form-control" id="proyecto" name="proyecto" value="{{ registro.proyecto }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="tipo_especialidad" class="form-label">Tipo Especialidad</label>
+            <input type="text" class="form-control" id="tipo_especialidad" name="tipo_especialidad" value="{{ registro.tipo_especialidad }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="area" class="form-label">Área</label>
+            <input type="text" class="form-control" id="area" name="area" value="{{ registro.area }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="fecha" class="form-label">Fecha</label>
+            <input type="date" class="form-control" id="fecha" name="fecha" value="{{ registro.fecha|date:'Y-m-d' }}">
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <a href="{% url 'dashboard_tabladepago_capacity' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <!-- Bootstrap Card -->
+            <div class="card">
+                <div class="card-header bg-danger text-white text-center">
+                    <h2>Eliminar Registro</h2>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger text-center">
+                        <p>¿Estás seguro que deseas eliminar el registro de <strong>{{ registro }}</strong>?</p>
+                        <p>Esta acción no se puede deshacer.</p>
+                    </div>
+
+                    <!-- Formulario de eliminación -->
+                    <form method="post" class="text-center">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-danger mr-3">Eliminar</button>
+                            <a href="{% url 'nuevatabladepagos' %}" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+    /* Personalización de la tarjeta */
+    .container {
+        margin-top: 50px;
+    }
+    h2 {
+        color: white;
+        margin: 0;
+    }
+    .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border-color: #f5c6cb;
+    }
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+</style>
+{% endblock %}

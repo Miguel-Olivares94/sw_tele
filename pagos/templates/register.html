@@ -1,0 +1,50 @@
+<!-- pagos/templates/pagos/register.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Registro</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="rut">RUT</label>
+                {{ form.rut }}
+            </div>
+            <div class="form-group">
+                <label for="first_name">Nombre</label>
+                {{ form.first_name }}
+            </div>
+            <div class="form-group">
+                <label for="last_name_paterno">Apellido Paterno</label>
+                {{ form.last_name_paterno }}
+            </div>
+            <div class="form-group">
+                <label for="last_name_materno">Apellido Materno</label>
+                {{ form.last_name_materno }}
+            </div>
+            <div class="form-group">
+                <label for="celular">Número de Celular</label>
+                {{ form.celular }}
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                {{ form.email }}
+            </div>
+            <div class="form-group">
+                <label for="password1">Contraseña</label>
+                {{ form.password1 }}
+            </div>
+            <div class="form-group">
+                <label for="password2">Confirmar Contraseña</label>
+                {{ form.password2 }}
+            </div>
+            <button type="submit" class="btn btn-primary">Registrar</button>
+        </form>
+    </div>
+</body>
+</html>

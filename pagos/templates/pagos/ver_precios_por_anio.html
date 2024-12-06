@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Precios del Año {{ anio }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Precios para el Año {{ anio }}</h1>
+
+    {% if mensaje %}
+        <p class="alert alert-warning text-center">{{ mensaje }}</p>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr style="background-color: #003563; color: white;">
+                        <th>#</th>
+                        <th>Sociedad</th>
+                        <th>Material</th>
+                        <th>Especialidad</th>
+                        <th>Zona de Adjudicación</th>
+                        <th>Zona Operacional</th>
+                        <th>Nuevo Precio</th>
+                        <th>Desvío (%)</th>
+                        <th>Área</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for registro in registros %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ registro.sociedad }}</td>
+                        <td>{{ registro.material }}</td>
+                        <td>{{ registro.especialidad }}</td>
+                        <td>{{ registro.zona_adjudicacion }}</td>
+                        <td>{{ registro.zona_operacional }}</td>
+                        <td>${{ registro.nuevo_precio }}</td>
+                        <td>{{ registro.desvio_porcentaje }}%</td>
+                        <td>{{ registro.area }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .container {
+        margin-top: 50px;
+    }
+
+    h1 {
+        color: #003563;
+    }
+
+    .table th, .table td {
+        padding: 10px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table thead th {
+        background-color: #003563;
+        color: white;
+    }
+
+    .table tbody tr:nth-child(odd) {
+        background-color: #f2f2f2;
+    }
+
+    .table tbody tr:hover {
+        background-color: #e9f4f8;
+    }
+</style>
+{% endblock %}

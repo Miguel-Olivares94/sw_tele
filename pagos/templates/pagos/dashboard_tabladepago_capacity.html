@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Dashboard de Tabla de Pago Capacity{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Dashboard de Tabla de Pago Capacity</h2>
+
+    <!-- Mostrar los registros por mes -->
+    <div class="row">
+        {% for record in records %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm" style="width: 100%; border-radius: 10px;">
+                <div class="card-body text-center">
+                    <h5 class="card-title" style="font-weight: bold; color: #003563;">
+                        {% with month_name=record.month %}
+                            {% if month_name == 1 %}Enero
+                            {% elif month_name == 2 %}Febrero
+                            {% elif month_name == 3 %}Marzo
+                            {% elif month_name == 4 %}Abril
+                            {% elif month_name == 5 %}Mayo
+                            {% elif month_name == 6 %}Junio
+                            {% elif month_name == 7 %}Julio
+                            {% elif month_name == 8 %}Agosto
+                            {% elif month_name == 9 %}Septiembre
+                            {% elif month_name == 10 %}Octubre
+                            {% elif month_name == 11 %}Noviembre
+                            {% elif month_name == 12 %}Diciembre
+                            {% else %}Desconocido
+                            {% endif %}
+                            {{ record.year }}
+                        {% endwith %}
+                    </h5>
+                    <p class="card-text">Total registros: {{ record.total_records }}</p>
+
+                    <!-- Botones de acción -->
+                    <a href="{% if record.year and record.month %}{% url 'ver_tabla_pago_capacity_mes' record.year record.month %}{% else %}#{% endif %}" 
+                    class="btn btn-outline-primary mb-2 action-button">
+                        <i class="fas fa-calendar-alt"></i> Ver registros del mes
+                    </a>
+                    
+                    <a href="{% if record.year and record.month %}{% url 'ver_resumen_mensual' record.month record.year %}{% else %}#{% endif %}" 
+                    class="btn btn-outline-success mb-2 action-button">
+                        <i class="fas fa-chart-bar"></i> Ver resumen del mes
+                    </a>
+
+                    <a href="{% if record.year and record.month %}{% url 'descargar_tabla_pago_capacity_mes' record.year record.month %}{% else %}#{% endif %}" 
+                    class="btn btn-outline-info mb-2 action-button">
+                        <i class="fas fa-file-excel"></i> Descargar Registros del Mes
+                    </a>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

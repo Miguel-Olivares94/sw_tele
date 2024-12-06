@@ -1,0 +1,48 @@
+<!-- pagos/templates/admin/lpu_form.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{{ title }}{% endblock %}</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-card {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #005BAC;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #004080;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="card form-card">
+            <h2 class="text-center">{{ title }}</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+            </form>
+            <a href="{% url 'admin:pagos_lpu_changelist' %}" class="btn btn-secondary btn-block mt-3">Volver a la lista</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Listado de Registros{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Listado de Registros</h2>
+
+    <!-- Campo de búsqueda (opcional) -->
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <input type="text" id="searchInput" class="form-control" placeholder="Buscar...">
+        </div>
+    </div>
+
+    <div class="table-responsive shadow-sm p-3 mb-5 bg-body rounded">
+        <table class="table table-striped table-hover table-bordered align-middle" id="registrosTable">
+            <thead class="table-primary text-center">
+                <tr>
+                    <th>#</th>
+                    <th>Nombre Técnico</th>
+                    <th>Nombre Team</th>
+                    <th>Especialidad Usuario</th>
+                    <th>RUT Técnico</th>
+                    <th>Zona Operacional</th>
+                    <th>Zona Adjudicación</th>
+                    <th>Total HH</th>
+                    <th>PHI</th>
+                    <th>Total HH PHI</th>
+                    <th>Nuevo Precio</th>
+                    <th>Q</th>
+                    <th>Total a Pago</th>
+                    <th>Tipo Red</th>
+                    <th>Proyecto</th>
+                    <th>Tipo Especialidad</th>
+                    <th>Área</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros %}
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td>{{ registro.nombre_tecnico }}</td>
+                    <td>{{ registro.nombre_team }}</td>
+                    <td>{{ registro.especialidad_usuario }}</td>
+                    <td>{{ registro.rut_tecnico }}</td>
+                    <td>{{ registro.zona_operacional }}</td>
+                    <td>{{ registro.zona_adjudicacion }}</td>
+                    <td class="text-end">{{ registro.total_hh }}</td>
+                    <td class="text-end">{{ registro.phi }}</td>
+                    <td class="text-end">{{ registro.total_hh_phi }}</td>
+                    <td class="text-end">{{ registro.nuevo_precio }}</td>
+                    <td class="text-end">{{ registro.Q }}</td>
+                    <td class="text-end">{{ registro.Total_a_Pago }}</td>
+                    <td>{{ registro.tipo_red }}</td>
+                    <td>{{ registro.proyecto }}</td>
+                    <td>{{ registro.tipo_especialidad }}</td>
+                    <td>{{ registro.area }}</td>
+                    <td>{{ registro.fecha }}</td>
+                    <td class="text-center">
+                        <a href="{% url 'editar_registro' registro.id %}" class="btn btn-sm btn-warning">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <a href="{% url 'eliminar_registro' registro.id %}" class="btn btn-sm btn-danger"
+                           onclick="return confirm('¿Estás seguro de que deseas eliminar este registro?')">
+                            <i class="fas fa-trash-alt"></i> Eliminar
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const table = document.getElementById('registrosTable');
+    const rows = table.getElementsByTagName('tr');
+
+    searchInput.addEventListener('keyup', function() {
+        const query = this.value.toLowerCase();
+        for (let i = 1; i < rows.length; i++) {
+            let row = rows[i];
+            let textContent = row.textContent.toLowerCase();
+            if (textContent.indexOf(query) > -1 || query === "") {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}

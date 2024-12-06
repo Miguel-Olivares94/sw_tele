@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Todos los Precios de Especialidades{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Todos los Precios de Especialidades</h1>
+
+    {% if especialidades %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Sociedad</th>
+                    <th>Material</th>
+                    <th>Especialidad</th>
+                    <th>Zona de Adjudicación</th>
+                    <th>Zona Operacional</th>
+                    <th>Nuevo Precio</th>
+                    <th>Desvío (%)</th>
+                    <th>Área</th>
+                    <th>Año</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for especialidad in especialidades %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ especialidad.sociedad }}</td>
+                    <td>{{ especialidad.material }}</td>
+                    <td>{{ especialidad.especialidad }}</td>
+                    <td>{{ especialidad.zona_adjudicacion }}</td>
+                    <td>{{ especialidad.zona_operacional }}</td>
+                    <td>{{ especialidad.nuevo_precio }}</td>
+                    <td>{{ especialidad.desvio_porcentaje }}</td>
+                    <td>{{ especialidad.area }}</td>
+                    <td>{{ especialidad.anio }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="alert alert-warning">No se encontraron registros de especialidades.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .container {
+        margin-top: 50px;
+    }
+
+    h1 {
+        color: #003563;
+    }
+
+    .table th, .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table thead th {
+        background-color: #003563;
+        color: white;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 vh-100 d-flex align-items-center justify-content-center">
+    <div class="col-lg-10">
+        <h1 class="text-center mb-4">Editar Registro de Capacity</h1>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white text-center">
+                <h4 class="mb-0"><i class="fas fa-database"></i> Formulario de Edición</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <!-- Campo Fecha Extract Registro -->
+                        <div class="form-group col-md-6">
+                            <label for="fecha_extract_registro">Fecha Extract Registro</label>
+                            {{ form.fecha_extract_registro }}
+                        </div>
+
+                        <!-- Campo Nombre Técnico -->
+                        <div class="form-group col-md-6">
+                            <label for="nombre_tecnico">Nombre Técnico</label>
+                            {{ form.nombre_tecnico }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Campo Nombre Team -->
+                        <div class="form-group col-md-6">
+                            <label for="nombre_team">Nombre Team</label>
+                            <select class="form-control" id="nombre_team" name="nombre_team">
+                                <option value="">Seleccione un Team</option>
+                                {% for team in nombre_team_choices %}
+                                    <option value="{{ team }}" {% if team == record.nombre_team %}selected{% endif %}>{{ team }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Campo Especialidad Usuario -->
+                        <div class="form-group col-md-6">
+                            <label for="especialidad_usuario">Especialidad Usuario</label>
+                            <select class="form-control" id="especialidad_usuario" name="especialidad_usuario">
+                                <option value="">Seleccione una Especialidad</option>
+                                {% for especialidad in especialidad_usuario_choices %}
+                                    <option value="{{ especialidad }}" {% if especialidad == record.especialidad_usuario %}selected{% endif %}>{{ especialidad }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Campo Área -->
+                        <div class="form-group col-md-6">
+                            <label for="area">Área</label>
+                            <select class="form-control" id="area" name="area">
+                                <option value="">Seleccione un Área</option>
+                                {% for area in area_choices %}
+                                    <option value="{{ area }}" {% if area == record.area %}selected{% endif %}>{{ area }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Campo Zona Operacional -->
+                        <div class="form-group col-md-6">
+                            <label for="zona_operacional">Zona Operacional</label>
+                            <select class="form-control" id="zona_operacional" name="zona_operacional">
+                                <option value="">Seleccione una Zona</option>
+                                {% for zona in zona_operacional_choices %}
+                                    <option value="{{ zona }}" {% if zona == record.zona_operacional %}selected{% endif %}>{{ zona }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Campo Zona Adjudicación -->
+                        <div class="form-group col-md-6">
+                            <label for="zona_adjudicacion">Zona Adjudicación</label>
+                            <select class="form-control" id="zona_adjudicacion" name="zona_adjudicacion">
+                                <option value="">Seleccione una Zona</option>
+                                {% for zona in zona_adjudicacion_choices %}
+                                    <option value="{{ zona }}" {% if zona == record.zona_adjudicacion %}selected{% endif %}>{{ zona }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Campo Especialidad Team -->
+                        <div class="form-group col-md-6">
+                            <label for="especialidad_team">Especialidad Team</label>
+                            <select class="form-control" id="especialidad_team" name="especialidad_team">
+                                <option value="">Seleccione una Especialidad</option>
+                                {% for team in especialidad_team_choices %}
+                                    <option value="{{ team }}" {% if team == record.especialidad_team %}selected{% endif %}>{{ team }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Campo Capacidad -->
+                        <div class="form-group col-md-6">
+                            <label for="capacidad">Capacidad</label>
+                            {{ form.capacidad }}
+                        </div>
+
+                        <!-- Campo Total HH -->
+                        <div class="form-group col-md-6">
+                            <label for="total_hh">Total HH</label>
+                            {{ form.total_hh }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Campo PHI -->
+                        <div class="form-group col-md-6">
+                            <label for="phi">PHI</label>
+                            {{ form.phi }}
+                        </div>
+
+                        <!-- Campo Total HH + PHI -->
+                        <div class="form-group col-md-6">
+                            <label for="total_hh_phi">Total HH + PHI</label>
+                            {{ form.total_hh_phi }}
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-save"></i> Guardar Cambios
+                        </button>
+                        <a href="{% url 'ver_datos_capacity_mes' record.fecha_extract_registro.year record.fecha_extract_registro.month %}" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-times-circle"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

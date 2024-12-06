@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Registros de SLA - {{ month_name }} {{ year }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Registros de SLA - {{ month_name }} {{ year }}</h2>
+
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Zona Adjudicación</th>
+                <th>Zona Operativa</th>
+                <th>Bonus/Malus</th>
+                <th>Proyecto</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registro in registros %}
+            <tr>
+                <td>{{ registro.zona_adjudicacion }}</td>
+                <td>{{ registro.zona_operativa }}</td>
+                <td>{{ registro.bonus_o_malus }}</td>
+                <td>{{ registro.proyecto }}</td>
+                <td>{{ registro.fecha|date:"d/m/Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No hay registros para este mes.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Botón para regresar al dashboard -->
+    <div class="text-center mt-4">
+        <a href="{% url 'sla_dashboard' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver al Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+    h2 {
+        color: #003563;
+        font-weight: bold;
+        font-size: 2rem;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+</style>
+{% endblock %}
+{% block extra_scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#sla-table').DataTable({
+            "paging": true,       // Pagina la tabla
+            "pageLength": 10,     // Filas por página
+            "searching": true,    // Habilita el buscador
+            "ordering": true,     // Permite ordenar columnas
+            "info": true,         // Muestra información de la tabla
+            "language": {
+                "search": "Buscar:",
+                "paginate": {
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                "zeroRecords": "No se encontraron registros"
+            }
+        });
+    });
+</script>
+{% endblock %}

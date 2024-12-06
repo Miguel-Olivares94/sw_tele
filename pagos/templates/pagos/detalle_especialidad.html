@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalles de {{ especialidad }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Detalles de {{ especialidad }}</h2>
+
+    <!-- Mostrar detalles de la especialidad -->
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Sociedad</th>
+                <th>Material</th>
+                <th>Zona Adjudicación</th>
+                <th>Zona Operacional</th>
+                <th>Área</th>
+                <th>Nuevo Precio 2024</th>
+                <th>Desvío Porcentaje</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for detalle in detalles %}
+            <tr>
+                <td>{{ detalle.sociedad }}</td>
+                <td>{{ detalle.material }}</td>
+                <td>{{ detalle.zona_adjudicacion }}</td>
+                <td>{{ detalle.zona_operacional }}</td>
+                <td>{{ detalle.area }}</td>
+                <td>${{ detalle.nuevo_precio_2024|floatformat:2 }}</td>
+                <td>{{ detalle.desvio_porcentaje|floatformat:2 }}%</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'dashboard_precios_especialidades' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver al Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

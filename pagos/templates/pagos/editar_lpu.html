@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Editar LPU</h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-5">
+            <form method="post">
+                {% csrf_token %}
+                
+                <!-- Todos los campos en una sola columna -->
+                <div class="mb-3">
+                    <label for="numero_de_tarea" class="form-label">Número de tarea</label>
+                    {{ form.numero_de_tarea }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="tipo_red" class="form-label">Tipo de red</label>
+                    {{ form.tipo_red }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="area_empresa" class="form-label">Área/Empresa</label>
+                    {{ form.area_empresa }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="zona_adjudicacion" class="form-label">Zona Adjudicación</label>
+                    {{ form.zona_adjudicacion }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="zona_operativa" class="form-label">Zona Operativa</label>
+                    {{ form.zona_operativa }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="zona_cluster" class="form-label">Zona Cluster</label>
+                    {{ form.zona_cluster }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="estado_de_trabajo" class="form-label">Estado de Trabajo</label>
+                    {{ form.estado_de_trabajo }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="sap_fijo_lpu" class="form-label">SAP Fijo LPU</label>
+                    {{ form.sap_fijo_lpu }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="sap_capex_lpu" class="form-label">SAP Capex LPU</label>
+                    {{ form.sap_capex_lpu }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="sap_opex_lpu" class="form-label">SAP Opex LPU</label>
+                    {{ form.sap_opex_lpu }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="item_lpu" class="form-label">Item LPU</label>
+                    {{ form.item_lpu }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="precio_mdm" class="form-label">Precio MDM</label>
+                    {{ form.precio_mdm }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="servicios" class="form-label">Servicios</label>
+                    {{ form.servicios }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="factor_multiplicador" class="form-label">Factor Multiplicador</label>
+                    {{ form.factor_multiplicador }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="total" class="form-label">Total</label>
+                    {{ form.total }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="estado_presupuesto" class="form-label">Estado Presupuesto</label>
+                    {{ form.estado_presupuesto }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="pagada" class="form-label">Pagada</label>
+                    {{ form.pagada }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="fecha_finalizacion_tarea" class="form-label">Fecha Finalización Tarea</label>
+                    {{ form.fecha_finalizacion_tarea }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="fecha_ingreso_trans_sap" class="form-label">Fecha Ingreso Trans. SAP</label>
+                    {{ form.fecha_ingreso_trans_sap }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="tiempo_trans_sap" class="form-label">Tiempo Trans. SAP</label>
+                    {{ form.tiempo_trans_sap }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="fecha_ingreso_validar_trans_sap" class="form-label">Fecha Ingreso Validar Trans. SAP</label>
+                    {{ form.fecha_ingreso_validar_trans_sap }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="tiempo_validar_trans_sap" class="form-label">Tiempo Validar Trans. SAP</label>
+                    {{ form.tiempo_validar_trans_sap }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="nombre_de_proyecto" class="form-label">Nombre del Proyecto</label>
+                    {{ form.nombre_de_proyecto }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="ano_finalizacion" class="form-label">Año Finalización</label>
+                    {{ form.ano_finalizacion }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="mes_finalizacion" class="form-label">Mes Finalización</label>
+                    {{ form.mes_finalizacion }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="tipo_red2" class="form-label">Tipo Red 2</label>
+                    {{ form.tipo_red2 }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="observacion_1" class="form-label">Observación 1</label>
+                    {{ form.observacion_1 }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="observacion_2" class="form-label">Observación 2</label>
+                    {{ form.observacion_2 }}
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success btn-lg px-4">Guardar Cambios</button>
+                    <a href="{% url 'ver_lpu' %}" class="btn btn-secondary btn-lg px-4">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .card-body {
+        padding: 30px;
+    }
+
+    .form-control {
+        padding: 12px;
+        font-size: 1rem;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #4e555b;
+    }
+
+    .mb-3 label {
+        font-weight: 500;
+    }
+
+    .container {
+        margin-top: 100px;
+    }
+
+    h1 {
+        color: #003563;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}

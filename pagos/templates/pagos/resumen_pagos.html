@@ -1,0 +1,45 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Zona Operacional</th>
+            <th>Especialidad</th>
+            <th>Vehículo</th>
+            <th>Gastos Administrativos</th>
+            <th>LPU</th>
+            <th>SLA</th>
+            <th>Total General</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in pagos %}
+        <tr>
+            <td>{{ row.zona_operacional }}</td>
+            <td data-bs-toggle="tooltip" title="Valor: ${{ row.total_especialidad|floatformat:2 }} Fila: {{ row.zona_operacional }} Columna: Especialidad">
+                ${{ row.total_especialidad|floatformat:2 }}
+            </td>
+            <td data-bs-toggle="tooltip" title="Valor: ${{ row.total_vehiculo|floatformat:2 }} Fila: {{ row.zona_operacional }} Columna: Vehículo">
+                ${{ row.total_vehiculo|floatformat:2 }}
+            </td>
+            <td data-bs-toggle="tooltip" title="Valor: ${{ row.total_gastos_admin|floatformat:2 }} Fila: {{ row.zona_operacional }} Columna: Gastos Administrativos">
+                ${{ row.total_gastos_admin|floatformat:2 }}
+            </td>
+            <td data-bs-toggle="tooltip" title="Valor: ${{ row.total_lpu|floatformat:2 }} Fila: {{ row.zona_operacional }} Columna: LPU">
+                ${{ row.total_lpu|floatformat:2 }}
+            </td>
+            <td data-bs-toggle="tooltip" title="Valor: ${{ row.total_sla|floatformat:2 }} Fila: {{ row.zona_operacional }} Columna: SLA">
+                ${{ row.total_sla|floatformat:2 }}
+            </td>
+            <td data-bs-toggle="tooltip" title="Valor: ${{ row.total_general|floatformat:2 }} Fila: {{ row.zona_operacional }} Columna: Total General">
+                ${{ row.total_general|floatformat:2 }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
