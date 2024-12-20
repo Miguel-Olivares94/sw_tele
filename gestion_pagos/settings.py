@@ -29,11 +29,13 @@ MESSAGE_TAGS = {
 
 # Base directory of the project
 BASE_DIR = Path(__file__).resolve().parent.parent
+RECAPTCHA_TEST_MODE = True
+
 
 # Quick-start development settings - unsuitable for production
 SECRET_KEY = 'django-insecure-l!w*xa#rk(9lrdfx3ph6j)x1r_9!%mp+hh-083-tw00caupanr'
-DEBUG = True
-ALLOWED_HOSTS = []
+DEBUG = False
+ALLOWED_HOSTS = ['46.202.151.235', 'localhost', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'import_export',
+    'widget_tweaks',
 ]
 
 REST_FRAMEWORK = {
@@ -90,12 +93,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'telefonica',
-        'USER': 'postgres',
-        'PASSWORD': 'nahum2020(',
+        'USER': 'nahum',
+        'PASSWORD': 'nahum2020',
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
+
+
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

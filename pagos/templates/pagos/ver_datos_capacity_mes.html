@@ -4,64 +4,75 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Filtrar Capacity del Mes: {{ month }}/{{ year }}</h2>
+    <!-- Encabezado principal similar a ver_lpu -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-4">Filtrar Capacity del Mes: {{ month }}/{{ year }}</h2>
+        <a href="{% url 'crear_capacity' %}" class="btn btn-success btn-sm">
+            <span class="icon">&#43;</span> Crear Capacity
+        </a>
+    </div>
 
     <!-- Formulario de filtros -->
-    <form method="GET" action="">
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="especialidad_usuario" class="form-label fw-bold">Especialidad Usuario:</label>
-                <select id="especialidad_usuario" name="especialidad_usuario" class="form-select">
-                    <option value="">Seleccione Especialidad</option>
-                    {% for especialidad in especialidades %}
-                        <option value="{{ especialidad }}" {% if especialidad == especialidad_usuario %}selected{% endif %}>{{ especialidad }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label for="area" class="form-label fw-bold">Área:</label>
-                <select id="area" name="area" class="form-select">
-                    <option value="">Seleccione Área</option>
-                    {% for area_option in areas %}
-                        <option value="{{ area_option }}" {% if area_option == area %}selected{% endif %}>{{ area_option }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title text-center mb-4">Filtros de Búsqueda</h5>
+            <form method="GET" action="">
+                <div class="row g-4 mb-3 justify-content-center">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <label for="especialidad_usuario" class="form-label fw-bold">Especialidad Usuario:</label>
+                        <select id="especialidad_usuario" name="especialidad_usuario" class="form-select form-select-sm">
+                            <option value="">Seleccione Especialidad</option>
+                            {% for especialidad in especialidades %}
+                                <option value="{{ especialidad }}" {% if especialidad == especialidad_usuario %}selected{% endif %}>{{ especialidad }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <label for="zona_operacional" class="form-label fw-bold">Zona Operacional:</label>
+                        <select id="zona_operacional" name="zona_operacional" class="form-select form-select-sm">
+                            <option value="">Seleccione Zona Operacional</option>
+                            {% for zona in zonas_operacionales %}
+                                <option value="{{ zona }}" {% if zona == zona_operacional %}selected{% endif %}>{{ zona }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row g-4 mb-3 justify-content-center">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <label for="zona_adjudicacion" class="form-label fw-bold">Zona Adjudicación:</label>
+                        <select id="zona_adjudicacion" name="zona_adjudicacion" class="form-select form-select-sm">
+                            <option value="">Seleccione Zona Adjudicación</option>
+                            {% for zona_option in zonas_adjudicacion %}
+                                <option value="{{ zona_option }}" {% if zona_option == zona_adjudicacion %}selected{% endif %}>{{ zona_option }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <label for="area" class="form-label fw-bold">Área:</label>
+                        <select id="area" name="area" class="form-select form-select-sm">
+                            <option value="">Seleccione Área</option>
+                            {% for area_option in areas %}
+                                <option value="{{ area_option }}" {% if area_option == area %}selected{% endif %}>{{ area_option }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success btn-sm me-2 px-3 py-1">
+                        <i class="bi bi-filter me-1"></i> Aplicar Filtros
+                    </button>
+                    <a href="{% url 'ver_datos_capacity_mes' year month %}" class="btn btn-warning btn-sm px-3 py-1">
+                        <i class="bi bi-x-circle me-1"></i> Limpiar Filtros
+                    </a>
+                </div>
+            </form>
         </div>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="zona_operacional" class="form-label fw-bold">Zona Operacional:</label>
-                <select id="zona_operacional" name="zona_operacional" class="form-select">
-                    <option value="">Seleccione Zona Operacional</option>
-                    {% for zona in zonas_operacionales %}
-                        <option value="{{ zona }}" {% if zona == zona_operacional %}selected{% endif %}>{{ zona }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label for="zona_adjudicacion" class="form-label fw-bold">Zona Adjudicación:</label>
-                <select id="zona_adjudicacion" name="zona_adjudicacion" class="form-select">
-                    <option value="">Seleccione Zona Adjudicación</option>
-                    {% for zona_option in zonas_adjudicacion %}
-                        <option value="{{ zona_option }}" {% if zona_option == zona_adjudicacion %}selected{% endif %}>{{ zona_option }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-
-        <!-- Botones de acción -->
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
-                <a href="{% url 'ver_datos_capacity_mes' year month %}" class="btn btn-secondary">Limpiar Filtros</a>
-            </div>
-        </div>
-    </form>
+    </div>
 
     <!-- Resultados de la tabla -->
-    <div class="table-responsive mt-4">
-        <table class="table table-bordered">
-            <thead class="table-dark">
+    <div class="table-responsive mt-4" style="white-space:nowrap;">
+        <table id="capacity-table" class="table table-striped table-bordered table-sm">
+            <thead class="thead-dark">
                 <tr>
                     <th>Fecha Extract Registro</th>
                     <th>RUT Técnico</th>
@@ -80,8 +91,8 @@
                 </tr>
             </thead>
             <tbody>
-                {% if datos %}
-                    {% for dato in datos %}
+                {% if page_obj %}
+                    {% for dato in page_obj %}
                         <tr>
                             <td>{{ dato.fecha_extract_registro|date:"d/m/Y" }}</td>
                             <td>{{ dato.rut_tecnico }}</td>
@@ -96,9 +107,13 @@
                             <td>{{ dato.total_hh }}</td>
                             <td>{{ dato.phi }}</td>
                             <td>{{ dato.total_hh_phi }}</td>
-                            <td>
-                                <a href="{% url 'editar_capacity' dato.id %}" class="btn btn-sm btn-primary">Editar</a>
-                                <a href="{% url 'eliminar_capacity' dato.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+                            <td class="d-flex justify-content-around">
+                                <a href="{% url 'editar_capacity' dato.id %}" class="btn btn-primary btn-sm d-flex align-items-center">
+                                    <i class="bi bi-pencil-square me-1"></i> Editar
+                                </a>
+                                <a href="{% url 'eliminar_capacity' dato.id %}" class="btn btn-danger btn-sm d-flex align-items-center">
+                                    <i class="bi bi-trash me-1"></i> Eliminar
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -111,17 +126,124 @@
         </table>
     </div>
 
-    <!-- Paginación -->
-    <div class="pagination justify-content-center">
-        {% if datos.has_previous %}
-            <a href="?page={{ datos.previous_page_number }}" class="btn btn-outline-secondary">&laquo; Anterior</a>
-        {% endif %}
-        {% for num in datos.paginator.page_range %}
-            <a href="?page={{ num }}" class="btn {% if datos.number == num %}btn-primary{% else %}btn-outline-secondary{% endif %}">{{ num }}</a>
-        {% endfor %}
-        {% if datos.has_next %}
-            <a href="?page={{ datos.next_page_number }}" class="btn btn-outline-secondary">Siguiente &raquo;</a>
-        {% endif %}
-    </div>
+    <!-- Paginación con elipsis -->
+    <nav aria-label="Page navigation" class="mt-3">
+        <ul class="pagination justify-content-center">
+            {% if page_obj and page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if area %}&area={{ area }}{% endif %}{% if zona_adjudicacion %}&zona_adjudicacion={{ zona_adjudicacion }}{% endif %}{% if zona_operacional %}&zona_operacional={{ zona_operacional }}{% endif %}{% if especialidad_usuario %}&especialidad_usuario={{ especialidad_usuario }}{% endif %}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            
+            {% if elided_range %}
+                {% for page_num in elided_range %}
+                    {% if page_num == '...' %}
+                        <li class="page-item disabled"><a class="page-link" href="#">{{ page_num }}</a></li>
+                    {% else %}
+                        <li class="page-item {% if page_obj.number == page_num %}active{% endif %}">
+                            <a class="page-link" href="?page={{ page_num }}{% if area %}&area={{ area }}{% endif %}{% if zona_adjudicacion %}&zona_adjudicacion={{ zona_adjudicacion }}{% endif %}{% if zona_operacional %}&zona_operacional={{ zona_operacional }}{% endif %}{% if especialidad_usuario %}&especialidad_usuario={{ especialidad_usuario }}{% endif %}">{{ page_num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            
+            {% if page_obj and page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if area %}&area={{ area }}{% endif %}{% if zona_adjudicacion %}&zona_adjudicacion={{ zona_adjudicacion }}{% endif %}{% if zona_operacional %}&zona_operacional={{ zona_operacional }}{% endif %}{% if especialidad_usuario %}&especialidad_usuario={{ especialidad_usuario }}{% endif %}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
 </div>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .btn-primary {
+        background-color: #009fe3;
+        border-color: #009fe3;
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    .btn-success {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    .btn-warning {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    .btn-primary:hover {
+        background-color: #007bb5;
+        border-color: #007bb5;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+
+    .table th, .table td {
+        padding: 4px 8px;
+        vertical-align: middle;
+        text-align: center;
+        white-space: nowrap;
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .table thead th {
+        background-color: #003563;
+        color: #fff;
+    }
+
+    .pagination .page-item .page-link {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+
+    .form-select-sm, .form-control-sm {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+</style>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- DataTables con Bootstrap -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css"/>
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#capacity-table').DataTable({
+            "paging": false, // La paginación la hace Django
+            "searching": true,
+            "ordering": true,
+            "info": false,
+            "language": {
+                "zeroRecords": "No se encontraron resultados",
+                "search": "Buscar:"
+            }
+        });
+    });
+</script>
 {% endblock %}

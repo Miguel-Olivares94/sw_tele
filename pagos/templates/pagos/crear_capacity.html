@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block content %}
 <div class="container mt-5 vh-100 d-flex align-items-center justify-content-center">
@@ -12,22 +13,52 @@
             <div class="card-body">
                 <form method="post">
                     {% csrf_token %}
-                    
+
+                    <!-- Mensajes de error generales del formulario -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
                     <div class="row">
                         <!-- Campo Fecha Extract Registro -->
                         <div class="form-group col-md-6">
-                            <label for="fecha_extract_registro">Fecha Extract Registro</label>
-                            {{ form.fecha_extract_registro }}
+                            <label for="id_fecha_extract_registro">Fecha Extract Registro</label>
+                            {{ form.fecha_extract_registro|add_class:"form-control"|attr:"id:id_fecha_extract_registro" }}
+                            {% if form.fecha_extract_registro.errors %}
+                                <div class="text-danger small">
+                                    {{ form.fecha_extract_registro.errors }}
+                                </div>
+                            {% endif %}
                         </div>
 
                         <!-- Campo Nombre Técnico -->
                         <div class="form-group col-md-6">
-                            <label for="nombre_tecnico">Nombre Técnico</label>
-                            {{ form.nombre_tecnico }}
+                            <label for="id_nombre_tecnico">Nombre Técnico</label>
+                            {{ form.nombre_tecnico|add_class:"form-control"|attr:"id:id_nombre_tecnico" }}
+                            {% if form.nombre_tecnico.errors %}
+                                <div class="text-danger small">
+                                    {{ form.nombre_tecnico.errors }}
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
 
                     <div class="row">
+                        <!-- Campo Rut Técnico (si está definido en el formulario) -->
+                        <div class="form-group col-md-6">
+                            <label for="id_rut_tecnico">RUT Técnico</label>
+                            {{ form.rut_tecnico|add_class:"form-control"|attr:"id:id_rut_tecnico" }}
+                            {% if form.rut_tecnico.errors %}
+                                <div class="text-danger small">
+                                    {{ form.rut_tecnico.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
                         <!-- Campo Nombre Team -->
                         <div class="form-group col-md-6">
                             <label for="nombre_team">Nombre Team</label>
@@ -37,8 +68,16 @@
                                     <option value="{{ team }}">{{ team }}</option>
                                 {% endfor %}
                             </select>
+                            {% comment %}
+                                Si quieres manejar errores aquí, tendrás que validarlo en la vista 
+                                y agregar el error a form.errors. Por ahora, no se muestra un error
+                                específico para este campo ya que no es parte del form, sino un campo
+                                select "manual".
+                            {% endcomment %}
                         </div>
+                    </div>
 
+                    <div class="row">
                         <!-- Campo Especialidad Usuario -->
                         <div class="form-group col-md-6">
                             <label for="especialidad_usuario">Especialidad Usuario</label>
@@ -49,9 +88,7 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    </div>
 
-                    <div class="row">
                         <!-- Campo Área -->
                         <div class="form-group col-md-6">
                             <label for="area">Área</label>
@@ -62,7 +99,9 @@
                                 {% endfor %}
                             </select>
                         </div>
+                    </div>
 
+                    <div class="row">
                         <!-- Campo Zona Operacional -->
                         <div class="form-group col-md-6">
                             <label for="zona_operacional">Zona Operacional</label>
@@ -73,9 +112,7 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    </div>
 
-                    <div class="row">
                         <!-- Campo Zona Adjudicación -->
                         <div class="form-group col-md-6">
                             <label for="zona_adjudicacion">Zona Adjudicación</label>
@@ -86,7 +123,9 @@
                                 {% endfor %}
                             </select>
                         </div>
+                    </div>
 
+                    <div class="row">
                         <!-- Campo Especialidad Team -->
                         <div class="form-group col-md-6">
                             <label for="especialidad_team">Especialidad Team</label>
@@ -97,33 +136,45 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    </div>
 
-                    <div class="row">
                         <!-- Campo Capacidad -->
                         <div class="form-group col-md-6">
-                            <label for="capacidad">Capacidad</label>
-                            {{ form.capacidad }}
-                        </div>
-
-                        <!-- Campo Total HH -->
-                        <div class="form-group col-md-6">
-                            <label for="total_hh">Total HH</label>
-                            {{ form.total_hh }}
+                            <label for="id_capacidad">Capacidad</label>
+                            {{ form.capacidad|add_class:"form-control"|attr:"id:id_capacidad" }}
+                            {% if form.capacidad.errors %}
+                                <div class="text-danger small">{{ form.capacidad.errors }}</div>
+                            {% endif %}
                         </div>
                     </div>
 
                     <div class="row">
-                        <!-- Campo PHI -->
+                        <!-- Campo Total HH -->
                         <div class="form-group col-md-6">
-                            <label for="phi">PHI</label>
-                            {{ form.phi }}
+                            <label for="id_total_hh">Total HH</label>
+                            {{ form.total_hh|add_class:"form-control"|attr:"id:id_total_hh" }}
+                            {% if form.total_hh.errors %}
+                                <div class="text-danger small">{{ form.total_hh.errors }}</div>
+                            {% endif %}
                         </div>
 
+                        <!-- Campo PHI -->
+                        <div class="form-group col-md-6">
+                            <label for="id_phi">PHI</label>
+                            {{ form.phi|add_class:"form-control"|attr:"id:id_phi" }}
+                            {% if form.phi.errors %}
+                                <div class="text-danger small">{{ form.phi.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
                         <!-- Campo Total HH + PHI -->
                         <div class="form-group col-md-6">
-                            <label for="total_hh_phi">Total HH + PHI</label>
-                            {{ form.total_hh_phi }}
+                            <label for="id_total_hh_phi">Total HH + PHI</label>
+                            {{ form.total_hh_phi|add_class:"form-control"|attr:"id:id_total_hh_phi" }}
+                            {% if form.total_hh_phi.errors %}
+                                <div class="text-danger small">{{ form.total_hh_phi.errors }}</div>
+                            {% endif %}
                         </div>
                     </div>
 

@@ -91,6 +91,8 @@ from django.forms.models import modelformset_factory
 from .models import Capacity
 
 class CapacityForm(forms.ModelForm):
+    rut_tecnico = forms.CharField(required=True, label='RUT Técnico')
+
     class Meta:
         model = Capacity
         fields = [
@@ -98,6 +100,7 @@ class CapacityForm(forms.ModelForm):
             'area', 'rut_tecnico', 'zona_operacional', 'zona_adjudicacion', 'especialidad_team',
             'capacidad', 'total_hh', 'phi', 'total_hh_phi'
         ]
+        
         widgets = {
             'fecha_extract_registro': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'nombre_tecnico': forms.TextInput(attrs={'class': 'form-control'}),
@@ -118,13 +121,34 @@ CapacityFormSet = modelformset_factory(Capacity, form=CapacityForm, extra=0)
 
 from .models import NuevaTablaPagos
 
+# pagos/forms.py
+
+from django import forms
+from .models import NuevaTablaPagos
+
 class NuevaTablaPagosForm(forms.ModelForm):
-    """
-    Formulario para crear o editar registros del modelo NuevaTablaPagos.
-    """
     class Meta:
         model = NuevaTablaPagos
-        fields = '__all__'
+        fields = '__all__'  # Incluye todos los campos del modelo
+
+        widgets = {
+            'sociedad': forms.Select(attrs={'class': 'form-control'}),
+            'material': forms.Select(attrs={'class': 'form-control'}),
+            'especialidad': forms.Select(attrs={'class': 'form-control'}),
+            'zona_adjudicacion': forms.Select(attrs={'class': 'form-control'}),
+            'zona_operacional': forms.Select(attrs={'class': 'form-control'}),
+            'nuevo_precio': forms.NumberInput(attrs={'class': 'form-control'}),
+            'desvio_porcentaje': forms.NumberInput(attrs={'class': 'form-control'}),
+            'area': forms.Select(attrs={'class': 'form-control'}),
+            'anio': forms.NumberInput(attrs={'class': 'form-control'}),  # Widget para 'anio'
+        }
+
+    def clean_anio(self):
+        anio = self.cleaned_data.get('anio')
+        if anio:
+            if anio < 1900 or anio > 2100:
+                raise forms.ValidationError("Ingrese un año válido entre 1900 y 2100.")
+        return anio
 
 # Forms for the LPU model
 from django import forms

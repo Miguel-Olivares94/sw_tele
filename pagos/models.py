@@ -258,3 +258,11 @@ class PrecioEspecialidad(models.Model):
 
     def __str__(self):
         return f"{self.especialidad} - {self.anio}"
+    
+    
+class ActualizacionDePagos(models.Model):
+    item = models.CharField(max_length=255)
+    nuevo_precio_2024 = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.item} - {self.nuevo_precio_2024}"

@@ -7,40 +7,35 @@
 <div class="container mt-5">
     <h1 class="text-center mb-4">Dashboard LPU</h1>
 
-    <!-- Mostrar los totales por Mes Finalización -->
+    <!-- Mostrar los totales por Mes y Año -->
     <div class="row">
         {% for record in lpu_data %}
         <div class="col-md-4 mb-4">
             <div class="card shadow-sm" style="width: 100%; border-radius: 10px;">
                 <div class="card-body text-center">
                     <h5 class="card-title" style="font-weight: bold; color: #003563;">
-                        {% if record.mes_nombre and record.ano_finalizacion %}
-                            {{ record.mes_nombre }} {{ record.ano_finalizacion }}
-                        {% elif record.ano_finalizacion %}
-                            Año: {{ record.ano_finalizacion }}
-                        {% else %}
-                            Sin Fecha
-                        {% endif %}
+                        {{ record.mes_nombre|default:"Sin Mes" }} {{ record.ano_finalizacion|default:"Sin Año" }}
                     </h5>
                     <p class="card-text">Total de Registros: {{ record.total_registros }}</p>
 
-                    {% if record.mes_finalizacion %}
+                    <!-- Enlace a Registros del Mes -->
+                    {% if record.mes_finalizacion and record.ano_finalizacion %}
                         <a href="{% url 'ver_lpu_por_mes' record.ano_finalizacion record.mes_finalizacion %}" class="btn btn-outline-info mb-2 action-button">
                             <i class="fas fa-calendar-alt"></i> Ver Registros del Mes
                         </a>
-                        <a href="{% url 'download_lpu_excel' %}" class="btn btn-outline-success mb-2 action-button">
-                            <i class="fas fa-file-excel"></i> Descargar LPU en Excel
-                        </a>
-                    {% elif record.ano_finalizacion %}
+                    {% endif %}
+
+                    <!-- Enlace a Registros del Año -->
+                    {% if record.ano_finalizacion %}
                         <a href="{% url 'ver_lpu_por_ano' record.ano_finalizacion %}" class="btn btn-outline-info mb-2 action-button">
                             <i class="fas fa-calendar-alt"></i> Ver Registros del Año
                         </a>
-                    {% else %}
-                        <p class="text-muted">No hay registros para este mes o año</p>
                     {% endif %}
                 </div>
             </div>
         </div>
+        {% empty %}
+        <p class="text-muted text-center">No hay registros disponibles.</p>
         {% endfor %}
     </div>
 
@@ -65,88 +60,29 @@
 
 {% block extra_styles %}
 <style>
-    .container {
-        margin-top: 50px;
-    }
-
     h1 {
         color: #003563;
         font-weight: bold;
         font-size: 2rem;
     }
 
-    /* Efecto de hover con cambio de color */
     .btn-outline-primary, .btn-outline-info, .btn-outline-warning {
         color: #333;
-        border: 1px solid;
-        transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+        transition: all 0.3s ease;
     }
 
-    .btn-outline-primary {
-        border-color: #007bff;
-        color: #007bff;
-    }
-    .btn-outline-primary:hover {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .btn-outline-info {
-        border-color: #17a2b8;
-        color: #17a2b8;
-    }
     .btn-outline-info:hover {
         background-color: #17a2b8;
         color: white;
     }
 
-    .btn-outline-warning {
-        border-color: #ffc107;
-        color: #ffc107;
-    }
-    .btn-outline-warning:hover {
-        background-color: #ffc107;
-        color: white;
-    }
-
-    /* Diseño de botones */
-    .action-button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        padding: 10px 20px;
-        border-radius: 25px;
-        font-size: 1rem;
-    }
-
-    .action-button i {
-        margin-right: 8px;
-    }
-
-    /* Estilo de las tarjetas */
     .card {
-        border: 1px solid #ddd;
         border-radius: 10px;
-        background-color: #f8f9fa;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition: transform 0.3s ease;
     }
 
-    /* Escala la tarjeta al pasar el mouse */
     .card:hover {
         transform: scale(1.03);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    }
-
-    .card-title {
-        font-size: 1.3rem;
-        font-weight: bold;
-        color: #003563;
-    }
-
-    .card-body {
-        text-align: center;
     }
 </style>
 {% endblock %}
@@ -154,37 +90,33 @@
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Gráfico de Total Registros por Mes y Año
-    const labels = [{% for record in lpu_data %} "{{ record.mes_nombre }} {{ record.ano_finalizacion }}", {% endfor %}];
-    const data = {
-        labels: labels,
-        datasets: [{
-            label: 'Total de Registros',
-            data: [{% for record in lpu_data %} {{ record.total_registros }}, {% endfor %}],
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-        }]
-    };
+    document.addEventListener("DOMContentLoaded", function() {
+        const labels = [{% for record in lpu_data %} "{{ record.mes_nombre|default:'Sin Mes' }} {{ record.ano_finalizacion|default:'Sin Año' }}", {% endfor %}];
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'Total de Registros',
+                data: [{% for record in lpu_data %} {{ record.total_registros|default:0 }}, {% endfor %}],
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        };
 
-    const config = {
-        type: 'bar',
-        data: data,
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    maxTicksLimit: 10
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    };
+        };
 
-    // Renderizar el gráfico
-    const lpuChart = new Chart(
-        document.getElementById('lpuChart'),
-        config
-    );
+        new Chart(document.getElementById('lpuChart'), config);
+    });
 </script>
 {% endblock %}

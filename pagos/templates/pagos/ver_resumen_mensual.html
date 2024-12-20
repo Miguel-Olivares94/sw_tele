@@ -1,344 +1,250 @@
-{% extends 'base.html' %}
-{% load static %}
-{% load custom_filters %}
+{% extends "base.html" %}
 
 {% block title %}Resumen Mensual{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="text-center mb-4" style="color: #003563;">Resumen Mensual de Pagos</h2>
+    <h1 class="text-center mb-4">Resumen Mensual</h1>
+    <h4 class="text-center text-muted">Mes: {{ month }} - Año: {{ year }}</h4>
 
-    <!-- Información general del resumen -->
-    <div class="card mb-4 shadow-sm">
+    <!-- Resumen Global -->
+    <div class="card shadow mt-4">
+        <div class="card-header bg-primary text-white">
+            <h5>Resumen Global</h5>
+        </div>
         <div class="card-body">
-            <h5 class="card-title text-center" style="font-weight: bold;">
-                Resumen de {{ year }} - {{ selected_month_name }}
-            </h5>
-            <hr>
-            <p class="text-center">
-                <strong>Total a Pago:</strong> ${{ resumen.total_pago|floatformat:2|default:"0.00" }}<br>
-                <strong>Total HH:</strong> {{ resumen.total_hh|floatformat:2|default:"0.00" }}<br>
-                <strong>Total Q:</strong> {{ resumen.total_q|floatformat:2|default:"0.00" }}
-            </p>
+            <p><strong>Total a Pagar:</strong> <span class="text-success">${{ resumen.total_pago|floatformat:2 }}</span></p>
+            <p><strong>Total HH:</strong> {{ resumen.total_hh|floatformat:2 }}</p>
+            <p><strong>Total Q:</strong> {{ resumen.total_q|floatformat:2 }}</p>
         </div>
     </div>
 
-    <!-- Tabla de Totales por Zona Operacional -->
-    <h3 class="text-center mb-4" style="color: #003563;">Totales por Zona Operacional</h3>
-    <div class="table-responsive mb-4">
-        <table class="table table-bordered table-striped table-hover shadow-sm">
-            <thead class="table-primary text-center">
+    <!-- Resumen por Área -->
+    <div class="card shadow mt-4">
+        <div class="card-header bg-success text-white">
+            <h5>Resumen por Área</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Área</th>
+                        <th>Suma Pago</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for area in resumen_areas %}
+                    <tr>
+                        <td>{{ area.area }}</td>
+                        <td>${{ area.suma_pago|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" class="text-center">No hay datos disponibles</td>
+                    </tr>
+                    {% endfor %}
+                    <tr class="table-secondary">
+                        <td><strong>Total Áreas</strong></td>
+                        <td><strong>${{ total_areas|floatformat:2 }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Resumen por Zona Operacional y Tipo de Red -->
+    <div class="card shadow mt-4">
+        <div class="card-header bg-warning text-dark">
+            <h5>Totales por Zona Operacional y Tipo de Red</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Zona Operacional</th>
+                        <th>Tipo de Red</th>
+                        <th>Suma Pago</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in resumen_zona_tipo_red %}
+                    <tr>
+                        <td>{{ item.zona_operacional }}</td>
+                        <td>{{ item.tipo_red }}</td>
+                        <td>${{ item.suma_pago|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">No hay datos disponibles</td>
+                    </tr>
+                    {% endfor %}
+                    <tr class="table-secondary">
+                        <td colspan="2"><strong>Total Zona-Tipo Red</strong></td>
+                        <td><strong>${{ total_zona_tipo_red|floatformat:2 }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Resumen por Tipo de Red -->
+    <div class="card shadow mt-4">
+        <div class="card-header bg-info text-white">
+            <h5>Resumen por Tipo de Red</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Tipo de Red</th>
+                        <th>Suma Pago</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for red in resumen_tipo_red %}
+                    <tr>
+                        <td>{{ red.tipo_red }}</td>
+                        <td>${{ red.suma_pago|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" class="text-center">No hay datos disponibles</td>
+                    </tr>
+                    {% endfor %}
+                    <tr class="table-secondary">
+                        <td><strong>Total Tipo de Red</strong></td>
+                        <td><strong>${{ total_tipo_red|floatformat:2 }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<!-- Resumen por Zona Operacional y Proyecto -->
+<div class="card shadow mt-4">
+    <div class="card-header bg-secondary text-white">
+        <h5>Resumen por Zona Operacional y Proyecto</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-bordered">
+            <thead>
                 <tr>
                     <th>Zona Operacional</th>
-                    <th>Total Especialidad</th>
-                    <th>Total Vehículo</th>
+                    <th>Proyecto</th>
+                    <th>Suma Pago</th>
                 </tr>
             </thead>
             <tbody>
-                {% for zona, totales in resumen_por_zona.items %}
+                {% for item in resumen_zona_proyecto %}
                 <tr>
-                    <td>{{ zona }}</td>
-                    <td class="text-end">${{ totales.total_especialidad|floatformat:2 }}</td>
-                    <td class="text-end">${{ totales.total_vehiculo|floatformat:2 }}</td>
+                    <td>{{ item.zona_operacional }}</td>
+                    <td>{{ item.proyecto }}</td>
+                    <td>${{ item.suma_pago|floatformat:2 }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center">No hay datos disponibles</td>
                 </tr>
                 {% endfor %}
-                <tr>
-                    <td><strong>Total General</strong></td>
-                    <td class="text-end">
-                        <strong>
-                            ${{ total_general_especialidad|floatformat:2 }}
-                            ({{ porcentaje_especialidad|floatformat:2 }}%)
-                        </strong>
-                    </td>
-                    <td class="text-end">
-                        <strong>
-                            ${{ total_general_vehiculo|floatformat:2 }}
-                            ({{ porcentaje_vehiculo|floatformat:2 }}%)
-                        </strong>
-                    </td>
+                <tr class="table-secondary">
+                    <td colspan="2"><strong>Total Zona-Proyecto</strong></td>
+                    <td><strong>${{ total_zona_proyecto|floatformat:2 }}</strong></td>
                 </tr>
             </tbody>
         </table>
-    </div>
-
-    <!-- Gráfico para Totales por Zona Operacional -->
-    <div class="mb-5">
-        <h5 class="text-center">Gráfico: Totales por Zona Operacional (Especialidad vs Vehículo)</h5>
-        <canvas id="zonaChart" width="400" height="200"></canvas>
-    </div>
-
-    <!-- Tabla de Totales por Proyecto y Zona Operacional -->
-    <h3 class="text-center mb-4" style="color: #003563;">Totales por Proyecto y Zona Operacional</h3>
-    <div class="table-responsive mb-4">
-        <table class="table table-bordered table-striped table-hover shadow-sm">
-            <thead class="table-primary text-center">
-                <tr>
-                    <th>Zona Operacional</th>
-                    {% for proyecto in proyectos %}
-                    <th>{{ proyecto }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in resumen_proyectos_zonas %}
-                <tr>
-                    <td>{{ row.zona_operacional }}</td>
-                    {% for proyecto in proyectos %}
-                    <td class="text-end">${{ row|get_item:proyecto|floatformat:2 }}</td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-                <tr>
-                    <td><strong>Total General</strong></td>
-                    {% for proyecto in proyectos %}
-                    <td class="text-end">
-                        <strong>
-                            ${{ totales_por_proyecto|get_item:proyecto|floatformat:2 }}
-                            ({{ porcentajes_por_proyecto|get_item:proyecto|floatformat:2 }}%)
-                        </strong>
-                    </td>
-                    {% endfor %}
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Gráfico para Totales por Proyecto y Zona Operacional -->
-    <div class="mb-5">
-        <h5 class="text-center">Gráfico: Totales por Proyecto y Zona Operacional</h5>
-        <canvas id="proyectoZonaChart" width="400" height="200"></canvas>
-    </div>
-
-    <!-- Tabla de Totales por Área -->
-    <h3 class="text-center mb-4" style="color: #003563;">Totales por Área</h3>
-    <div class="table-responsive mb-4">
-        <table class="table table-bordered table-striped table-hover shadow-sm">
-            <thead class="table-primary text-center">
-                <tr>
-                    <th>Área</th>
-                    <th>Suma de Total a Pago</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for area_data in resumen_areas_final %}
-                <tr>
-                    <td>{{ area_data.area }}</td>
-                    <td class="text-end">${{ area_data.suma_pago|floatformat:2 }}</td>
-                </tr>
-                {% endfor %}
-                <tr>
-                    <td><strong>Total General</strong></td>
-                    <td class="text-end"><strong>${{ total_general_area|floatformat:2 }}</strong></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Gráfico para Totales por Área -->
-    <div class="mb-5">
-        <h5 class="text-center">Gráfico: Totales por Área</h5>
-        <canvas id="areaChart" width="400" height="200"></canvas>
-    </div>
-
-    <!-- Botón para regresar -->
-    <div class="text-center mt-4">
-        <a href="{% url 'dashboard_tabladepago_capacity' %}" class="btn btn-outline-secondary">
-            <i class="fas fa-arrow-left"></i> Volver al Dashboard
-        </a>
+        <canvas id="chartZonaProyecto" class="mt-4"></canvas>
     </div>
 </div>
 
-<!-- Incluir Chart.js desde un CDN -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Totales por Proyecto -->
+<div class="card shadow mt-4">
+    <div class="card-header bg-secondary text-white">
+        <h5>Totales por Proyecto</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Proyecto</th>
+                    <th>Suma Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for proyecto, suma in totales_por_proyecto.items %}
+                <tr>
+                    <td>{{ proyecto }}</td>
+                    <td>${{ suma|floatformat:2 }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2" class="text-center">No hay datos disponibles</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<script>
-// ======================================
-// DATOS Y GRÁFICOS POR ZONA OPERACIONAL
-// ======================================
-const zonaLabels = [
-    {% for zona, totales in resumen_por_zona.items %}
-        "{{ zona }}",
-    {% endfor %}
-];
 
-const especialidadData = [
-    {% for zona, totales in resumen_por_zona.items %}
-        {{ totales.total_especialidad|default:"0" }},
-    {% endfor %}
-];
+    <!-- Resumen por Tipo de Especialidad -->
 
-const vehiculoData = [
-    {% for zona, totales in resumen_por_zona.items %}
-        {{ totales.total_vehiculo|default:"0" }},
-    {% endfor %}
-];
+    <!-- Resumen por Tipo de Especialidad -->
+    <div class="card shadow mt-4">
+        <div class="card-header bg-danger text-white">
+            <h5>Resumen por Tipo de Especialidad</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Zona Operacional</th>
+                        <th>Tipo de Especialidad</th>
+                        <th>Suma Pago</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in resumen_tipo_especialidad %}
+                    <tr>
+                        <td>{{ item.zona_operacional }}</td>
+                        <td>{{ item.tipo_especialidad }}</td>
+                        <td>${{ item.suma_pago|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">No hay datos disponibles</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-const ctxZona = document.getElementById('zonaChart').getContext('2d');
-const zonaChart = new Chart(ctxZona, {
-    type: 'bar',
-    data: {
-        labels: zonaLabels,
-        datasets: [
-            {
-                label: 'Especialidad',
-                data: especialidadData,
-                backgroundColor: 'rgba(54, 162, 235, 0.6)'
-            },
-            {
-                label: 'Vehículo',
-                data: vehiculoData,
-                backgroundColor: 'rgba(255, 99, 132, 0.6)'
-            }
-        ]
-    },
-    options: {
-        responsive: true,
-        scales: {
-            y: {
-                beginAtZero: true,
-                title: {
-                    display: true,
-                    text: 'Total a Pago'
-                }
-            },
-            x: {
-                title: {
-                    display: true,
-                    text: 'Zonas Operacionales'
-                }
-            }
-        }
-    }
-});
+    <!-- Totales por Tipo de Especialidad -->
+<!-- Totales por Tipo de Especialidad -->
+<div class="card shadow mt-4">
+    <div class="card-header bg-warning text-dark">
+        <h5>Totales por Tipo de Especialidad</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Suma Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Vehículo</td>
+                    <td>${{ total_vehiculo|floatformat:2 }}</td>
+                </tr>
+                <tr>
+                    <td>Especialidad</td>
+                    <td>${{ total_especialidad|floatformat:2 }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-// =========================================
-// DATOS Y GRÁFICOS POR PROYECTO Y ZONA (CON PORCENTAJES EN TOOLTIP)
-// =========================================
-const proyectoZonaLabels = [
-    {% for row in resumen_proyectos_zonas %}
-        "{{ row.zona_operacional }}",
-    {% endfor %}
-];
-
-const proyectoZonaDatasets = [
-    {% for proyecto in proyectos %}
-    {
-        label: "{{ proyecto }}",
-        data: [
-            {% for row in resumen_proyectos_zonas %}
-                {{ row|get_item:proyecto|default:"0" }},
-            {% endfor %}
-        ],
-        backgroundColor: 'rgba(54, 162, 235, 0.6)'
-    },
-    {% endfor %}
-];
-
-const projectColors = [
-    'rgba(255, 99, 132, 0.6)',
-    'rgba(54, 162, 235, 0.6)',
-    'rgba(255, 205, 86, 0.6)',
-    'rgba(75, 192, 192, 0.6)',
-    'rgba(153, 102, 255, 0.6)',
-    'rgba(201, 203, 207, 0.6)',
-    'rgba(255, 159, 64, 0.6)',
-    'rgba(199, 199, 199, 0.6)',
-    'rgba(160, 100, 200, 0.6)',
-    'rgba(100, 160, 200, 0.6)'
-];
-
-proyectoZonaDatasets.forEach((dataset, index) => {
-    dataset.backgroundColor = projectColors[index % projectColors.length];
-});
-
-const ctxProyectoZona = document.getElementById('proyectoZonaChart').getContext('2d');
-const proyectoZonaChart = new Chart(ctxProyectoZona, {
-    type: 'bar',
-    data: {
-        labels: proyectoZonaLabels,
-        datasets: proyectoZonaDatasets
-    },
-    options: {
-        responsive: true,
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: function(tooltipItem) {
-                var dataset = tooltipItem.dataset;
-                var currentValue = dataset.data[tooltipItem.dataIndex];
-                var total = 0;
-                for (var i = 0; i < dataset.data.length; i++) {
-                  total += dataset.data[i];
-                }
-                var percentage = ((currentValue / total) * 100).toFixed(2);
-                return dataset.label + ': ' + currentValue + ' (' + percentage + '%)';
-              }
-            }
-          }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                title: {
-                    display: true,
-                    text: 'Total a Pago'
-                }
-            },
-            x: {
-                title: {
-                    display: true,
-                    text: 'Zonas Operacionales'
-                }
-            }
-        }
-    }
-});
-
-// ================================
-// DATOS Y GRÁFICOS POR ÁREA
-// ================================
-const areaLabels = [
-    {% for area_data in resumen_areas_final %}
-        "{{ area_data.area }}",
-    {% endfor %}
-];
-const areaData = [
-    {% for area_data in resumen_areas_final %}
-        {{ area_data.suma_pago|default:"0" }},
-    {% endfor %}
-];
-
-const ctxArea = document.getElementById('areaChart').getContext('2d');
-const areaChart = new Chart(ctxArea, {
-    type: 'bar',
-    data: {
-        labels: areaLabels,
-        datasets: [{
-            label: 'Total a Pago',
-            data: areaData,
-            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        scales: {
-            y: {
-                beginAtZero: true,
-                title: {
-                  display: true,
-                  text: 'Total a Pago'
-                }
-            },
-            x: {
-                title: {
-                  display: true,
-                  text: 'Áreas'
-                }
-            }
-        }
-    }
-});
-</script>
+</div>
 {% endblock %}

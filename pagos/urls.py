@@ -19,11 +19,13 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     # Rutas de autenticación y navegación
     path('', views.index, name='index'),
-        path('', views.index, name='index'),
+    path('', views.index, name='index'),
     path('register/', views.register, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('menu/', views.menu, name='menu'),
+    path('ver_lpu_por_ano/<int:ano>/', views.ver_lpu_por_ano, name='ver_lpu_por_ano'),
+
 
     # Rutas relacionadas con TablaDePagoCapacity
     path('dashboard_tabladepago_capacity/', views.dashboard_tabladepago_capacity, name='dashboard_tabladepago_capacity'),
@@ -66,7 +68,6 @@ urlpatterns = [
     path('descargar-capacity/', views.descargar_capacity, name='descargar_capacity'),
 
     # Otras rutas
-    path('pagos/resumen-pagos/', views.ver_resumen_pagos, name='ver_resumen_pagos'),
 
     # Rutas relacionadas con SLAReport
     path('sla/', views.ver_sla_report, name='ver_sla_report'),

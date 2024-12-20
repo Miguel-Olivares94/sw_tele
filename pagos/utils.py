@@ -97,3 +97,14 @@ def calcular_resumen_mensual(mes, anio):
         'mes': mes,
         'anio': anio,
     }
+
+import re
+
+def limpiar_texto(texto):
+    """
+    Limpia el texto eliminando espacios adicionales y normalizando mayúsculas.
+    """
+    if not isinstance(texto, str):
+        return ""
+    texto_limpio = re.sub(r'\s+', ' ', texto.strip())  # Eliminar espacios adicionales
+    return texto_limpio.upper()  # Convertir a mayúsculas
